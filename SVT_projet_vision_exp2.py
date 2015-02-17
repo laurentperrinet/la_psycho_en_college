@@ -12,20 +12,27 @@ import numpy as np
 # Import key parts of the PsychoPy library:
 from psychopy import visual, core, event, gui, misc
 
+
+N_taille, taille_0 = 5, 1.
+N_ecc = 3
+
+N_trial_per_condition = 6 
+N_trial = N_ecc * N_taille * N_trial_per_condition / 2
+
+core_wait = 0.100
+core_wait_stim = 0.300
+
 #if no file use some defaults
 info = {}
 info['observer'] = 'anonymous'
 info['screen_width'] = 51.5
 info['screen_distance'] = 57.
-info['nTrials'] = 50
+info['N_trial_per_condition'] = N_trial_per_condition
 
-N_taille, taille_0 = 5, 1.
-N_ecc = 3
-core_wait = 0.100
-core_wait_stim = 0.300
 
-eccen_ = np.linspace(5., 15., N_ecc, endpoint=True) # en degrés d'angle visuel
-taille_ = np.logspace(-1.5, 1.5, N_taille, endpoint=True, base=2) * taille_0  # en degrés d'angle visuel
+eccen = np.linspace(5., 15., N_ecc, endpoint=True) # en degrés d'angle visuel
+eccen = np.hstack((-eccen, eccen)).sort()
+taille = np.logspace(-1.5, 1.5, N_taille, endpoint=True, base=2) * taille_0  # en degrés d'angle visuel
 
 try:
     dlg = gui.DlgFromDict(info)
@@ -108,33 +115,47 @@ instructions_txt.draw()
 win.flip()
 getResponse()
 
+
+#create your list of stimuli
+#NB as of version 1.62 you could simpmly import an excel spreadsheet with this
+#using data.importTrialTypes('someFile.xlsx')
+stimList = []
+for eccen_ in eccen_:
+    for taille_ in taille:
+        for consigne_ in [0, 1]:
+            stimList.append( 
+                {'eccen':eccen_, 'taille':taille_, 'consigne':consigne_} #this is a python 'dictionary'
+                )
+
+#organise them with the trial handler
+trials = data.TrialHandler(stimList, info['N_trial_per_condition'])
+trials.data.addDataType('result')#this will help store things with the stimuli
+
 # on commence l'expérience
-results = np.zeros((4, info['nTrials']))
-for i_trial in range(info['nTrials']):
+for trial in trials:
+    # fixation
     wait_for_next.draw()
     win.flip()
     core.wait(core_wait)
-    consigne = np.random.randint(2) # au hasard E ou 3
-    flip = np.random.randint(2)*2-1
-    eccen = flip*eccen_[np.random.randint(N_ecc)]
-    taille = taille_[np.random.randint(N_taille)]
+    # stimulus
     wait_for_next.draw()
     presentStimulus(consigne, eccen, taille)
     win.flip()
+    # réponse
     core.wait(core_wait_stim)
     wait_for_response.draw()
     win.flip()
     result = getResponse()
-    results[0, i_trial] = consigne
-    results[1, i_trial] = eccen
-    results[2, i_trial] = taille
-    results[3, i_trial] = result
+    trials.data.add('result', result) 
 
 win.update()
 core.wait(0.5)
 win.close()
 
-print results
 #save data
-fileName = 'data/' + experiment + '_' +  + info['observer'] + '_' + info['timeStr']
-np.save(fileName, results)
+trials.printAsText(stimOut=['eccen', 'taille', 'consigne'], #write summary data to screen 
+                  dataOut=['choice_raw'])
+trials.saveAsExcel(fileName=fileName.replace('.pickle', '.xls'), # ...or an xlsx file (which supports sheets)
+                  sheetName = 'rawData',
+                  stimOut=['eccen', 'taille', 'consigne'], 
+                  dataOut=['choice_raw'])
