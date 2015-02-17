@@ -10,7 +10,7 @@ experiment = 'ophtalmo'
 
 import numpy as np
 # Import key parts of the PsychoPy library:
-from psychopy import visual, core, event, gui, misc
+from psychopy import visual, core, event, gui, misc, data
 
 
 N_taille, taille_0 = 5, 1.
@@ -30,10 +30,6 @@ info['screen_distance'] = 57.
 info['N_trial_per_condition'] = N_trial_per_condition
 
 
-eccen = np.linspace(5., 15., N_ecc, endpoint=True) # en degrés d'angle visuel
-eccen = np.hstack((-eccen, eccen)).sort()
-taille = np.logspace(-1.5, 1.5, N_taille, endpoint=True, base=2) * taille_0  # en degrés d'angle visuel
-
 try:
     dlg = gui.DlgFromDict(info)
 except:
@@ -42,7 +38,7 @@ except:
 
 import time
 info['timeStr'] = time.strftime("%b_%d_%H%M", time.localtime())
-fileName = 'data/' + experiment + '_' +  + info['observer'] + '_' + info['timeStr'] + '.pickle'
+fileName = 'data/' + experiment + '_' + info['observer'] + '_' + info['timeStr'] + '.pickle'
 #save to a file for future use (ie storing as defaults)
 if dlg.OK:
     misc.toFile(fileName, info)
@@ -89,7 +85,7 @@ def getResponse():
                 return None
             #valid response - check to see if correct
             elif key in ['left', 'right']:
-                if key in ['left'] :return -1
+                if key in ['left'] :return 0
                 else: return 1
             else:
                 visual.TextStim(win, "pressez < ou > (ou Esc pour sortir) (mais pas %s)" %key, height=0.05, color='red').draw()
@@ -117,14 +113,12 @@ getResponse()
 
 
 #create your list of stimuli
-#NB as of version 1.62 you could simpmly import an excel spreadsheet with this
-#using data.importTrialTypes('someFile.xlsx')
 stimList = []
-for eccen_ in eccen_:
-    for taille_ in taille:
-        for consigne_ in [0, 1]:
+for eccen in np.hstack((np.linspace(-15., -5., N_ecc, endpoint=True), np.linspace(5., 15., N_ecc, endpoint=True))):
+    for taille in np.logspace(-1.5, 1.5, N_taille, endpoint=True, base=2) * taille_0: # en degrés d'angle visuel
+        for consigne in [0, 1]:
             stimList.append( 
-                {'eccen':eccen_, 'taille':taille_, 'consigne':consigne_} #this is a python 'dictionary'
+                {'eccen':eccen, 'taille':taille, 'consigne':consigne} #this is a python 'dictionary'
                 )
 
 #organise them with the trial handler
@@ -139,7 +133,7 @@ for trial in trials:
     core.wait(core_wait)
     # stimulus
     wait_for_next.draw()
-    presentStimulus(consigne, eccen, taille)
+    presentStimulus(trial['consigne'], trial['eccen'], trial['taille'])
     win.flip()
     # réponse
     core.wait(core_wait_stim)
@@ -154,8 +148,9 @@ win.close()
 
 #save data
 trials.printAsText(stimOut=['eccen', 'taille', 'consigne'], #write summary data to screen 
-                  dataOut=['choice_raw'])
-trials.saveAsExcel(fileName=fileName.replace('.pickle', '.xls'), # ...or an xlsx file (which supports sheets)
+                  dataOut=['result_raw'])
+trials.saveAsExcel(fileName=fileName.replace('.pickle', ''), # ...or an xlsx file (which supports sheets)
                   sheetName = 'rawData',
                   stimOut=['eccen', 'taille', 'consigne'], 
-                  dataOut=['choice_raw'])
+                  dataOut=['result_raw'])
+trials.saveAsPickle(fileName=fileName.replace('.pickle', '_data.pickle'))#this saves a copy of the whole object  
