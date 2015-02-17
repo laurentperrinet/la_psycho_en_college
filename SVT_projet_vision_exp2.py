@@ -83,14 +83,15 @@ def getResponse():
 def angle2cm(size_in_deg, screen_distance):
     return 2* screen_distance * np.tan(size_in_deg * np.pi / 180. / 2.)
 
+def angle2norm(size_in_deg, screen_distance, screen_width):
+    return angle2cm(size_in_deg, screen_distance) / screen_width * 2
+
 def presentStimulus(consigne, eccen, taille):
     """Present stimulus
     """
-    if consigne: texte = u"E"
-    else: texte = u"3"
-    
-    stim = visual.TextStim(win, text = texte, units='cm', height=angle2cm(taille, info['screen_distance']), color='black',
-                        pos=[0., angle2cm(eccen, info['screen_distance'])], alignHoriz='center', alignVert='center' )
+    stim = visual.TextStim(win, text=u"E", units='norm', height=angle2norm(taille, info['screen_distance'], info['screen_width']), color='black',
+                        pos=[angle2norm(eccen, info['screen_distance'], info['screen_width']), 0], alignHoriz='center', alignVert='center',
+                        flip=not(consigne))
     stim.draw()
 
 # http://www.psychopy.org/general/units.html
@@ -107,13 +108,14 @@ win.flip()
 getResponse()
 
 # on commence l'expérience
-results = numpy.zeros((4, info['nTrials']))
+results = np.zeros((4, info['nTrials']))
 for i_trial in range(info['nTrials']):
     wait_for_next.draw()
     win.flip()
     core.wait(core_wait)
     consigne = np.random.randint(2) # au hasard E ou 3
-    eccen = eccen_[np.random.randint(N_ecc)]
+    flip = np.random.randint(2)*2-1
+    eccen = flip*eccen_[np.random.randint(N_ecc)]
     taille = taille_[np.random.randint(N_taille)]
     presentStimulus(consigne, eccen, taille)
     win.flip()
@@ -133,4 +135,4 @@ win.close()
 print results
 #save data
 fileName = 'data/' + experiment + info['observer'] + '_' + info['timeStr']
-numpy.save(fileName, results)
+np.save(fileName, results)
