@@ -5,6 +5,8 @@
 
 Une expérience simple de mesure de l'acuité en fonction de l'eccentricité
 
+Renvoie un tableau donnant en fonction de l'eccentricité et de la taille la consigne ainsi que le résultat (0 = mauvaise réponse; 1 = bonne réponse).
+
 """
 experiment = 'Ophtalmo'
 
@@ -16,7 +18,7 @@ from psychopy import visual, core, event, gui, misc, data
 N_taille, taille_0 = 5, 1.
 N_ecc = 3
 
-N_trial_per_condition = 6 
+N_trial_per_condition = 6
 N_trial = N_ecc * N_taille * N_trial_per_condition / 2
 
 core_wait = 0.400
@@ -25,11 +27,13 @@ core_wait_stim = 0.200
 #if no file use some defaults
 info = {}
 info['observer'] = 'anonymous'
-info['SaveDir'] = '/Users/montagnini.a/WORK/PROJECTS/ECOLE/SVT_projet_vision.py/data'
+# info['SaveDir'] = '/Users/montagnini.a/WORK/PROJECTS/ECOLE/SVT_projet_vision.py/data'
+info['SaveDir'] = 'data'
 info['screen_width'] = 51.5
 info['screen_distance'] = 57.
 info['N_trial_per_condition'] = N_trial_per_condition
-
+import time
+info['timeStr'] = time.strftime("%b_%d_%H%M", time.localtime())
 
 try:
     dlg = gui.DlgFromDict(info)
@@ -37,10 +41,16 @@ except:
     print('Could not load gui... running with defaut parameters')
     print(info)
 
-import time
-info['timeStr'] = time.strftime("%b_%d_%H%M", time.localtime())
-#fileName = 'data/' + experiment + '_' + info['observer'] + '_' + info['timeStr'] + '.pickle'
-fileName = info['SaveDir'] +'/' + experiment + '_' + info['observer'] + '_' + info['timeStr'] 
+# creating data directory
+import os
+try:
+    os.mkdir(info['SaveDir'])
+except:
+    pass
+
+# creating basic file name
+fileName = os.path.join(info['SaveDir'], experiment + '_' + info['observer'] + '_' + info['timeStr'])
+
 #save to a file for future use (ie storing as defaults)
 if dlg.OK:
     misc.toFile(fileName, info)
@@ -60,7 +70,7 @@ A la présentation d'un symbole "?", répondez avec:
     - la touche "<" (gauche) pour le caractère "3" (ou "E" inversée)
     - la touche ">" (droite) pour le caractère "E"
 
-ATTENTION: certaines fois la tache va etre très difficile.Il faut tout 
+ATTENTION: certaines fois la tache va etre très difficile.Il faut tout
 de meme repondre en essayant de ne pas donner toujours la meme reponse
 
 Pressez sur une de ces 2 touches pour continuer...
@@ -68,15 +78,15 @@ Pressez sur une de ces 2 touches pour continuer...
 """
 
 # Objets correspondant à la croix de fixation, à la consigne de réponse et aux instructions:
-wait_for_next = visual.TextStim(win, 
+wait_for_next = visual.TextStim(win,
                         text = u"+", units='norm', height=0.15, color='white',
-                        pos=[0., -0.], alignHoriz='center', alignVert='center' ) 
-wait_for_response = visual.TextStim(win, 
+                        pos=[0., -0.], alignHoriz='center', alignVert='center' )
+wait_for_response = visual.TextStim(win,
                         text = u"?", units='norm', height=0.15, color='DarkSlateBlue',
-                        pos=[0., -0.], alignHoriz='center', alignVert='center' ) 
-instructions_txt = visual.TextStim(win, 
+                        pos=[0., -0.], alignHoriz='center', alignVert='center' )
+instructions_txt = visual.TextStim(win,
                         text = instructions, units='norm', height=0.05, color='BlanchedAlmond',
-                        pos=[0., -0.], alignHoriz='center', alignVert='center' ) 
+                        pos=[0., -0.], alignHoriz='center', alignVert='center' )
 
 def getResponse():
     event.clearEvents() # clear the event buffer to start with
@@ -122,7 +132,7 @@ stimList = []
 for eccen in np.hstack((np.linspace(-15., -5., N_ecc, endpoint=True), np.linspace(5., 15., N_ecc, endpoint=True))):
     for taille in np.logspace(-1.5, 1.5, N_taille, endpoint=True, base=2) * taille_0: # en degrés d'angle visuel
         for consigne in [0, 1]:
-            stimList.append( 
+            stimList.append(
                 {'eccen':eccen, 'taille':taille, 'consigne':consigne} #this is a python 'dictionary'
                 )
 
@@ -148,17 +158,17 @@ for trial in trials:
     response = getResponse()
     if response == consigne: result=1
     else: result = 0
-    trials.data.add('result', result) 
+    trials.data.add('result', result)
 
 win.update()
 core.wait(0.5)
 win.close()
 
 #save data
-trials.printAsText(stimOut=['eccen', 'taille', 'consigne'], #write summary data to screen 
+trials.printAsText(stimOut=['eccen', 'taille', 'consigne'], #write summary data to screen
                   dataOut=['result_raw'])
 trials.saveAsExcel(fileName=fileName.replace('.pickle', ''), # ...or an xlsx file (which supports sheets)
                   sheetName = 'rawData',
-                  stimOut=['eccen', 'taille', 'consigne'], 
+                  stimOut=['eccen', 'taille', 'consigne'],
                   dataOut=['result_raw'])
-#trials.saveAsPickle(fileName=fileName.replace('.pickle', '_data.pickle'))#this saves a copy of the whole object  
+trials.saveAsPickle(fileName=fileName.replace('.pickle', '_data.pickle'))#this saves a copy of the whole object
