@@ -16,4 +16,4 @@ Il suffit :
  3. d'ouvrir ce fichier à partir de ce programme (en utilisant la fonction *Ouvrir...* dans le menu *Fichier*,
  4. de le lancer en utilisant la fonction *Lancer* dans le menu *Outil*.
 
-Contactez-nous (laurent.perrinet@univ-amu.fr et anna.montagnini@univ-amu.fr) en ces du moindre soucipour appliquer ces instructions.
+Contactez-nous (laurent.perrinet@univ-amu.fr et anna.montagnini@univ-amu.fr) en cas du moindre souci pour appliquer ces instructions.
