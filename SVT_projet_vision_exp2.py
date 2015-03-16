@@ -66,12 +66,14 @@ instructions = u"""
 Le but de cette expérience est de distinguer la lettre qui est présentée
 tout en gardant l'oeil fixé sur la croix centrale.
 
-A la présentation d'un symbole "?", répondez avec:
+A la présentation du symbole "?", répondez avec:
     - la touche "<" (gauche) pour le caractère "3" (ou "E" inversée)
     - la touche ">" (droite) pour le caractère "E"
 
-ATTENTION: certaines fois la tache va etre très difficile.Il faut tout
-de meme repondre en essayant de ne pas donner toujours la meme reponse
+ATTENTION: certaines fois la tâche va être très difficile. Il faut tout
+de même obligatoirement répondre!
+
+Notez que l'ordre est aléatoire et donc qu'il ne faut pas nécessairement donner toujours la même réponse.
 
 Pressez sur une de ces 2 touches pour continuer...
 
@@ -126,7 +128,6 @@ instructions_txt.draw()
 win.flip()
 getResponse()
 
-
 #create your list of stimuli
 stimList = []
 for eccen in np.hstack((np.linspace(-15., -5., N_ecc, endpoint=True), np.linspace(5., 15., N_ecc, endpoint=True))):
@@ -142,16 +143,24 @@ trials.data.addDataType('result')#this will help store things with the stimuli
 
 # on commence l'expérience
 for trial in trials:
+
+    # info
+    infotxt = visual.TextStim(win,
+                        text = u"{0} / {1}".format(trials.thisN+1, trials.nTotal), units='norm', height=0.1, color='DarkSlateBlue',
+                        pos=[-.9, -.9], alignHoriz='center', alignVert='center' )
+    infotxt.draw()
     # fixation
     wait_for_next.draw()
     win.flip()
     core.wait(core_wait)
     # stimulus
+    infotxt.draw()
     wait_for_next.draw()
     presentStimulus(trial['consigne'], trial['eccen'], trial['taille'])
     win.flip()
     # réponse
     core.wait(core_wait_stim)
+    infotxt.draw()
     wait_for_response.draw()
     win.flip()
     #result = getResponse()
