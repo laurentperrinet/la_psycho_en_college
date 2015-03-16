@@ -6,7 +6,7 @@
 Une expérience simple de mesure de l'acuité en fonction de l'eccentricité
 
 """
-experiment = 'ophtalmo'
+experiment = 'Ophtalmo'
 
 import numpy as np
 # Import key parts of the PsychoPy library:
@@ -19,12 +19,13 @@ N_ecc = 3
 N_trial_per_condition = 6 
 N_trial = N_ecc * N_taille * N_trial_per_condition / 2
 
-core_wait = 0.100
-core_wait_stim = 0.300
+core_wait = 0.400
+core_wait_stim = 0.200
 
 #if no file use some defaults
 info = {}
 info['observer'] = 'anonymous'
+info['SaveDir'] = '/Users/montagnini.a/WORK/PROJECTS/ECOLE/SVT_projet_vision.py/data'
 info['screen_width'] = 51.5
 info['screen_distance'] = 57.
 info['N_trial_per_condition'] = N_trial_per_condition
@@ -38,7 +39,8 @@ except:
 
 import time
 info['timeStr'] = time.strftime("%b_%d_%H%M", time.localtime())
-fileName = 'data/' + experiment + '_' + info['observer'] + '_' + info['timeStr'] + '.pickle'
+#fileName = 'data/' + experiment + '_' + info['observer'] + '_' + info['timeStr'] + '.pickle'
+fileName = info['SaveDir'] +'/' + experiment + '_' + info['observer'] + '_' + info['timeStr'] 
 #save to a file for future use (ie storing as defaults)
 if dlg.OK:
     misc.toFile(fileName, info)
@@ -55,8 +57,11 @@ Le but de cette expérience est de distinguer la lettre qui est présentée
 tout en gardant l'oeil fixé sur la croix centrale.
 
 A la présentation d'un symbole "?", répondez avec:
-    - la touche "<" (gauche) pour le charactère "3"
-    - la touche ">" (droite) pour le charactère "E"
+    - la touche "<" (gauche) pour le caractère "3" (ou "E" inversée)
+    - la touche ">" (droite) pour le caractère "E"
+
+ATTENTION: certaines fois la tache va etre très difficile.Il faut tout 
+de meme repondre en essayant de ne pas donner toujours la meme reponse
 
 Pressez sur une de ces 2 touches pour continuer...
 
@@ -139,7 +144,10 @@ for trial in trials:
     core.wait(core_wait_stim)
     wait_for_response.draw()
     win.flip()
-    result = getResponse()
+    #result = getResponse()
+    response = getResponse()
+    if response == consigne: result=1
+    else: result = 0
     trials.data.add('result', result) 
 
 win.update()
@@ -153,4 +161,4 @@ trials.saveAsExcel(fileName=fileName.replace('.pickle', ''), # ...or an xlsx fil
                   sheetName = 'rawData',
                   stimOut=['eccen', 'taille', 'consigne'], 
                   dataOut=['result_raw'])
-trials.saveAsPickle(fileName=fileName.replace('.pickle', '_data.pickle'))#this saves a copy of the whole object  
+#trials.saveAsPickle(fileName=fileName.replace('.pickle', '_data.pickle'))#this saves a copy of the whole object  
