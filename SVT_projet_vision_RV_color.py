@@ -5,8 +5,6 @@
 
 Une expérience simple de recherche visuelle
 
-test
-
 """
 experiment = 'RVcolor'
 
@@ -182,6 +180,7 @@ for trial in trials:
     [response, respRT] = getResponse()
 #   if response == consigne: result=1
  #   else: result = 0
+    consigne=trial['consigne']
     if response == consigne: result=1
     else: result = 0
     trials.data.add('result', result) 
