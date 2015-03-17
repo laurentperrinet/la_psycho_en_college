@@ -174,6 +174,7 @@ for trial in trials:
     win.flip()
     #result = getResponse()
     response = getResponse()
+    consigne=trial['consigne']
     if response == consigne: result=1
     else: result = 0
     trials.data.add('result', result)
