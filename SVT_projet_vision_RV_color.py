@@ -4,8 +4,11 @@
 """
 
 Une expérience simple de recherche visuelle
+
+test
+
 """
-experiment = 'RV'
+experiment = 'RVcolor'
 
 import numpy as np
 # Import key parts of the PsychoPy library:
@@ -28,7 +31,8 @@ core_wait_stim = 0.500
 #if no file use some defaults
 info = {}
 info['observer'] = 'anonymous'
-info['SaveDir'] = '/Users/montagnini.a/WORK/PROJECTS/ECOLE/SVT_projet_vision.py/data'
+#info['SaveDir'] = '/Users/montagnini.a/WORK/PROJECTS/ECOLE/SVT_projet_vision.py/data'
+info['SaveDir'] = 'data'
 info['screen_width'] = 30
 info['screen_distance'] = 40.
 info['N_trial_per_condition'] = N_trial_per_condition
@@ -42,7 +46,14 @@ except:
 
 import time
 info['timeStr'] = time.strftime("%b_%d_%H%M", time.localtime())
-fileName = 'data/' + experiment + '_' + info['observer'] + '_' + info['timeStr'] + '.pickle'
+# creating data directory
+import os
+try:
+    os.mkdir(info['SaveDir'])
+except:
+    pass
+# creating basic file name
+fileName = os.path.join(info['SaveDir'], experiment + '_' + info['observer'] + '_' + info['timeStr'])
 #save to a file for future use (ie storing as defaults)
 if dlg.OK:
     misc.toFile(fileName, info)
@@ -62,7 +73,10 @@ Après la présentation des stimuli, répondez le plus rapidement possible avec:
     - la touche ">" (droite) si le caractère rouge est présent 
     - la touche "<" (gauche) si le caractère rouge est absent 
 
-ATTENTION: certaines fois la tache va etre plus difficile que d'autres.
+ATTENTION: certaines fois la tache va etre plus difficile que d'autres. Il faut toujours rester concentrés, bien
+fixer la croix centrale et essayer de donner la réponse correcte le plus rapidement possible.
+En bas à gauche de l'écran vous verrez défiler le nombre de l'essai courant: ne vous faites pas distraire par cela, 
+c'est une information que votre binome peut surveiller et vous en informer de temps en temps.
 Pressez sur une de ces 2 touches pour continuer...
 
 """
@@ -146,6 +160,11 @@ trials.data.addDataType('result')#this will help store things with the stimuli
 
 # on commence l'expérience
 for trial in trials:
+    # info
+    infotxt = visual.TextStim(win,
+    text = u"{0} / {1}".format(trials.thisN+1, trials.nTotal), units='norm', height=0.1, color='DarkSlateBlue',
+    pos=[-.9, -.9], alignHoriz='center', alignVert='center' )
+    infotxt.draw()
     # fixation
     wait_for_next.draw()
     win.flip()
