@@ -179,7 +179,7 @@ win.close()
 #save data
 trials.printAsText(stimOut=['pos_indx', 'config', 'consigne'], #write summary data to screen 
                   dataOut=['result_raw','RT_raw'])
-trials.saveAsExcel(fileName, #=fileName.replace('.pickle', ''), # ...or an xlsx file (which supports sheets)
+trials.saveAsExcel(fileName=fileName.replace('.pickle', ''), # ...or an xlsx file (which supports sheets)
                   sheetName = 'rawData',
                   stimOut=['pos_indx', 'config', 'consigne'], 
                   dataOut=['result_raw','RT_raw'])
