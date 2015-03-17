@@ -66,7 +66,6 @@ instructions = u"""
 Le but de cette expérience est de distinguer la lettre qui est présentée
 tout en gardant l'oeil fixé sur la croix centrale.
 
-<<<<<<< Updated upstream:SVT_projet_vision_ophtalmo.py
 A la présentation du symbole "?", répondez avec:
     - la touche "<" (gauche) pour le caractère "3" (ou "E" inversée)
     - la touche ">" (droite) pour le caractère "E"
@@ -75,14 +74,7 @@ ATTENTION: certaines fois la tâche va être très difficile. Il faut tout
 de même obligatoirement répondre!
 
 Notez que l'ordre est aléatoire et donc qu'il ne faut pas nécessairement donner toujours la même réponse.
-=======
-A la présentation d'un symbole "?", répondez avec:
-    - la touche "<" (gauche) pour le caractère "3" (ou "E" inversée)
-    - la touche ">" (droite) pour le caractère "E"
 
-ATTENTION: certaines fois la tache va etre très difficile.Il faut tout 
-de meme repondre en essayant de ne pas donner toujours la meme reponse
->>>>>>> Stashed changes:SVT_projet_vision_exp2.py
 
 Pressez sur une de ces 2 touches pour continuer...
 
@@ -184,11 +176,7 @@ for trial in trials:
     response = getResponse()
     if response == consigne: result=1
     else: result = 0
-<<<<<<< Updated upstream:SVT_projet_vision_ophtalmo.py
     trials.data.add('result', result)
-=======
-    trials.data.add('result', result) 
->>>>>>> Stashed changes:SVT_projet_vision_exp2.py
 
 win.update()
 core.wait(0.5)
