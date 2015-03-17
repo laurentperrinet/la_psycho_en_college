@@ -97,6 +97,14 @@ def getResponse():
         for key in event.getKeys():
             #quit
             if key in ['escape', 'q']:
+                # info
+                infotxt = visual.TextStim(win,
+                                    text = u"Attention!!! : vous etes sortis de l'expérimentation, les résultats ne sont pas sauvés!"), units='norm', height=0.1, color='DarkSlateBlue',
+                                    pos=[0., 0.], alignHoriz='center', alignVert='center' )
+                infotxt.draw()
+                # fixation
+                win.flip()
+                core.wait(core_wait)
                 win.close()
                 core.quit()
                 return None
@@ -105,7 +113,7 @@ def getResponse():
                 if key in ['left'] :return 0
                 else: return 1
             else:
-                visual.TextStim(win, "pressez < ou > (ou Esc pour sortir) (mais pas %s)" %key, height=0.05, color='red').draw()
+                visual.TextStim(win, u"pressez < ou > (ou Esc / q pour sortir et annuler l'expérience) (mais pas %s)" %key, height=0.05, color='red').draw()
                 win.flip()
 
 # http://www.psychopy.org/general/units.html
