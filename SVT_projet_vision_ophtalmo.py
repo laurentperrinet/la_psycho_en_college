@@ -100,12 +100,12 @@ def getResponse():
             if key in ['escape', 'q']:
                 # info
                 infotxt = visual.TextStim(win,
-                                    text = u"Attention!!! : vous etes sortis de l'expérimentation, les résultats ne sont pas sauvés!"), units='norm', height=0.1, color='DarkSlateBlue',
+                                    text = u"Attention!!! : vous etes sortis de l'expérimentation, les résultats ne sont pas sauvés!", units='norm', height=0.1, color='DarkSlateBlue',
                                     pos=[0., 0.], alignHoriz='center', alignVert='center' )
                 infotxt.draw()
                 # fixation
                 win.flip()
-                core.wait(core_wait)
+                core.wait(2.0)
                 win.close()
                 core.quit()
                 return None
