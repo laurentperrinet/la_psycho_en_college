@@ -2,9 +2,12 @@
 Introduction à la psychophysique en collège
 ===========================================
 
-Une expérience utilisant http://www.psychopy.org pour mesurer son acuité visuelle en fonction de l'excentricité.
+Une série d'expériences utilisant http://www.psychopy.org pour :
 
+- mesurer son acuité visuelle en fonction de l'excentricité ().
+- 
 
+voir le chapeau des scripts pour une description détaillée. 
 
 Pour les instructeurs:
 ----------------------
