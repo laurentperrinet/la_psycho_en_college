@@ -4,7 +4,7 @@
 """
 
 Une expérience simple de recherche visuelle
-cas dit the "recherche pop-out" parce-que la cible recherchée saute à l'oeil
+cas dit de "recherche pop-out" parce-que la cible recherchée saute à l'oeil
 
 Renvoie un tableau donnant l'exactitude de la réponse (colonnes "results": 1=réponse correcte; 0=réponse fausse) et les temps de réaction (colonnes RT) en fonction de la position de la cible (colonne "pos_indx"),
 de la configuration (colonne "config", ça correspond à combien d'éléments sont présentés) et de la consigne (colonne "consigne": 1=cible présente,
