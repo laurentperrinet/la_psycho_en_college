@@ -3,29 +3,48 @@
 
 """
 Une expérience simple de recherche visuelle
-cas dit de "recherche de conjonction d'attributs" parce-que la cible recherchée est définie pas deux attributs et elle ne saute à l'oeil
+===========================================
 
-Renvoie un tableau donnant l'exactitude de la réponse (colonnes "results": 1=réponse correcte; 0=réponse fausse) et les temps de réaction (colonnes RT) en fonction de la position de la cible (colonne "pos_indx"),
-de la configuration (colonne "config", ça correspond à combien d'éléments sont présentés) et de la consigne (colonne "consigne": 1=cible présente,
+Cas dit de "recherche de conjonction d'attributs" parce-que la cible recherchée
+est définie par deux attributs et elle ne `saute'' à l'oeil
+
+Renvoie un tableau donnant l'exactitude de la réponse (colonnes "results":
+1=réponse correcte; 0=réponse fausse) et les temps de réaction (colonnes RT) en
+fonction de la position de la cible (colonne "pos_indx"),
+de la configuration (colonne "config", ça correspond à combien d'éléments sont
+présentés) et de la consigne (colonne "consigne": 1=cible présente,
 0=cible absente).
-Cette expérience devrait résulter relativement difficile (en tout cas moins facile de la précedente, sur la recherche visuelle dite de "pop-out").
-Pour passer l'expérience, chaque étudiant doit se mettre bien devant l'écran et se concentrer pendant toute la durée. Il faut essayer de donner 
+
+Cette expérience devrait résulter relativement difficile (en tout cas moins facile
+de la précedente, sur la recherche visuelle dite de "pop-out").
+Pour passer l'expérience, chaque étudiant doit se mettre bien devant l'écran et se
+concentrer pendant toute la durée. Il faut essayer de donner
 la réponse rapidement sans pour autant se tromper.
 Au début il faut rentrer des infos à la main:
-nombre d'essais par condition - > mettre 5 au minimum, plus pour des résultats plus précis (conseil: faire une manip "pilote" avec 1 seul essai par condition pour se rendre compte de comment ça marche et du temps nécessaire)
+nombre d'essais par condition - > mettre 5 au minimum, plus pour des résultats
+plus précis (conseil: faire une manip "pilote" avec 1 seul essai par condition
+pour se rendre compte de comment ça marche et du temps nécessaire)
 largeur de l'écran -> mettre la votre
 distance de l'écran -> mettre la votre
 repertoire de sauvegarde ... vous savez maintenant!
 
 Après la manip: visualiser la feuille excel pour chaque élève
-A partir de la feuille excel on peu visualiser les temps de réaction en fonction du nombre d'éléments présents dans la scène. La difficulté d’une tâche de recherché visuelle se reflète dans la pente de cette function (RT en function du nombre d’éléments).
+A partir de la feuille excel on peu visualiser les temps de réaction en fonction
+du nombre d'éléments présents dans la scène. La difficulté d’une tâche de recherche
+visuelle se reflète dans la pente de cette function (RT en function du nombre d’éléments).
 En pratique les élèves devraient:
 1) séléctionner les essais avec une réponse correcte (colonne results=1)
-2) grouper les essais qui correspondent à une même configuration (en pratique, filtre sur la colonne config pour prendre 3 groupes avec: config=2, 4 ou 8 ainsi que à une même consigne (colonne consigne = 1 ou 0)
-3) visualisation: valeurs ordonnées de config sur l'axe X ; moyenne des temps de réaction correspondant à chaque valeur de config - conseil utiliser des couleurs differentes pour les deux condition “cible présente” et “cible absente”.
+2) grouper les essais qui correspondent à une même configuration (en pratique,
+filtre sur la colonne config pour prendre 3 groupes avec: config=2, 4 ou 8 ainsi
+que à une même consigne (colonne consigne = 1 ou 0)
+3) visualisation: valeurs ordonnées de config sur l'axe X ; moyenne des temps de
+réaction correspondant à chaque valeur de config - conseil utiliser des couleurs
+differentes pour les deux condition “cible présente” et “cible absente”.
 3) tracer des droites à travers les points:  il s’agit d’une régression linéaire.
-4) Comparer les résultats: Observer si les temps de reaction augmentent plus ou moins en function du nombre d’éléments quand la cible est présente plutôt que absente et dans cette experience plutôt que dans l’autre experience de recherché visuelle.
-
+4) Comparer les résultats: Observer si les temps de reaction augmentent plus ou
+moins en function du nombre d’éléments quand la cible est présente plutôt que
+absente et dans cette experience plutôt que dans l’autre experience de recherché
+visuelle.
 
 """
 experiment = 'RV_FC'
@@ -37,7 +56,7 @@ from psychopy import visual, core, event, gui, misc, data
 
 N_config = 3
 N_presence = 2
-N_trial_per_condition = 5 
+N_trial_per_condition = 5
 N_trial = N_config * N_presence * N_trial_per_condition * 8
 
 eccentricity = 6
@@ -83,23 +102,23 @@ Le but de cette expérience est de dire si la lettre E de couleur rouge est pres
 parmi des distracteurs (des E de couleur vert ou des 3 de couleur rouge), tout en gardant bien l'oeil fixé sur la croix centrale.
 
 Après la présentation des stimuli, répondez le plus rapidement possible avec:
-    - la touche ">" (droite) si le caractère "E" rouge est présent 
-    - la touche "<" (gauche) si le caractère "E" rouge est absent 
+    - la touche ">" (droite) si le caractère "E" rouge est présent
+    - la touche "<" (gauche) si le caractère "E" rouge est absent
 
 Pressez sur une de ces 2 touches pour continuer...
 
 """
 
 # Objets correspondant à la croix de fixation, à la consigne de réponse et aux instructions:
-wait_for_next = visual.TextStim(win, 
+wait_for_next = visual.TextStim(win,
                         text = u"+", units='norm', height=0.15, color='white',
-                        pos=[0., -0.], alignHoriz='center', alignVert='center' ) 
-wait_for_response = visual.TextStim(win, 
+                        pos=[0., -0.], alignHoriz='center', alignVert='center' )
+wait_for_response = visual.TextStim(win,
                         text = u"?", units='norm', height=0.15, color='DarkSlateBlue',
-                        pos=[0., -0.], alignHoriz='center', alignVert='center' ) 
-instructions_txt = visual.TextStim(win, 
+                        pos=[0., -0.], alignHoriz='center', alignVert='center' )
+instructions_txt = visual.TextStim(win,
                         text = instructions, units='norm', height=0.05, color='BlanchedAlmond',
-                        pos=[0., -0.], alignHoriz='center', alignVert='center' ) 
+                        pos=[0., -0.], alignHoriz='center', alignVert='center' )
 
 def getResponse():
     event.clearEvents() # clear the event buffer to start with
@@ -136,11 +155,11 @@ def presentStimulus(consigne, pos_indx, config):
     stim_xpos = angle2norm(eccentricity * xfac[pos_indx], info['screen_distance'], info['screen_width'])
     stim_ypos = angle2norm(eccentricity * yfac[pos_indx], info['screen_distance'], info['screen_width'])
     stim = visual.TextStim(win, text=u"E", units='norm', height=angle2norm(taille, info['screen_distance'], info['screen_width']), color=target_color,
-                        pos=[stim_xpos, stim_ypos], 
+                        pos=[stim_xpos, stim_ypos],
                         alignHoriz='center', alignVert='center', flipHoriz=not(consigne))
     stim.draw()
     for i in np.arange(config-1):
-       flip = randint(2) 
+       flip = randint(2)
        if flip==1: # distractor = 3
           distr_col = 'red'
        else: distr_col = 'green'
@@ -148,10 +167,10 @@ def presentStimulus(consigne, pos_indx, config):
        distr_xpos = angle2norm(eccentricity * xfac[pos_shift], info['screen_distance'], info['screen_width'])
        distr_ypos = angle2norm(eccentricity * yfac[pos_shift], info['screen_distance'], info['screen_width'])
        distr = visual.TextStim(win, text=u"E", units='norm', height=angle2norm(taille, info['screen_distance'], info['screen_width']), color=distr_col,
-                    pos=[distr_xpos, distr_ypos], 
+                    pos=[distr_xpos, distr_ypos],
                     alignHoriz='center', alignVert='center', flipHoriz=flip)
        distr.draw()
-    
+
 # initialisation: on montre les instructions
 instructions_txt.draw()
 win.flip()
@@ -163,7 +182,7 @@ stimList = []
 for pos_indx in [0,1,2,3,4,5,6,7]:
     for config in [2,4,8]: # en degrés d'angle visuel
         for consigne in [0, 1]:
-            stimList.append( 
+            stimList.append(
                 {'pos_indx':pos_indx, 'config':config, 'consigne':consigne} #this is a python 'dictionary'
                 )
 
@@ -192,18 +211,18 @@ for trial in trials:
  #   else: result = 0
     if response == consigne: result=1
     else: result = 0
-    trials.data.add('result', result) 
-    trials.data.add('RT', respRT) 
+    trials.data.add('result', result)
+    trials.data.add('RT', respRT)
 
 win.update()
 core.wait(0.5)
 win.close()
 
 #save data
-trials.printAsText(stimOut=['pos_indx', 'config', 'consigne'], #write summary data to screen 
+trials.printAsText(stimOut=['pos_indx', 'config', 'consigne'], #write summary data to screen
                   dataOut=['result_raw','RT_raw'])
 trials.saveAsExcel(fileName=fileName.replace('.pickle', ''), # ...or an xlsx file (which supports sheets)
                   sheetName = 'rawData',
-                  stimOut=['pos_indx', 'config', 'consigne'], 
+                  stimOut=['pos_indx', 'config', 'consigne'],
                   dataOut=['result_raw','RT_raw'])
-#trials.saveAsPickle(fileName=fileName.replace('.pickle', '_data.pickle'))#this saves a copy of the whole object  
+#trials.saveAsPickle(fileName=fileName.replace('.pickle', '_data.pickle'))#this saves a copy of the whole object
