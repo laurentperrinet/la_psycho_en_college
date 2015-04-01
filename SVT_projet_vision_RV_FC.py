@@ -185,7 +185,7 @@ def presentStimulus(consigne, pos_indx, config):
        pos_shift = np.remainder(pos_indx + (i+1)*(8/config),8)
        distr_xpos = angle2norm(eccentricity * xfac[pos_shift], info['screen_distance'], info['screen_width'])
        distr_ypos = angle2norm(eccentricity * yfac[pos_shift], info['screen_distance'], info['screen_width'])
-       distr = visual.TextStim(win, text=u"E", units='heightq', height=angle2norm(taille, info['screen_distance'], info['screen_width']), color=distr_col,
+       distr = visual.TextStim(win, text=u"E", units='height', height=angle2norm(taille, info['screen_distance'], info['screen_width']), color=distr_col,
                     pos=[distr_xpos, distr_ypos],
                     alignHoriz='center', alignVert='center', flipHoriz=flip)
        distr.draw()
