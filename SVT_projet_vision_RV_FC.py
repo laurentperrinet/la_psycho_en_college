@@ -50,7 +50,6 @@ visuelle.
 experiment = 'RV_FC'
 
 import numpy as np
-from numpy.random import *
 # Import key parts of the PsychoPy library:
 from psychopy import visual, core, event, gui, misc, data
 
@@ -71,7 +70,8 @@ core_wait_stim = 0.500
 #if no file use some defaults
 info = {}
 info['observer'] = 'anonymous'
-info['SaveDir'] = '/Users/montagnini.a/WORK/PROJECTS/ECOLE/SVT_projet_vision.py/data'
+#info['SaveDir'] = '/Users/montagnini.a/WORK/PROJECTS/ECOLE/SVT_projet_vision.py/data'
+info['SaveDir'] = 'data'
 info['screen_width'] = 30
 info['screen_distance'] = 40.
 info['N_trial_per_condition'] = N_trial_per_condition
@@ -85,7 +85,14 @@ except:
 
 import time
 info['timeStr'] = time.strftime("%b_%d_%H%M", time.localtime())
-fileName = 'data/' + experiment + '_' + info['observer'] + '_' + info['timeStr'] + '.pickle'
+# creating data directory
+import os
+try:
+    os.mkdir(info['SaveDir'])
+except:
+    pass
+# creating basic file name
+fileName = os.path.join(info['SaveDir'], experiment + '_' + info['observer'] + '_' + info['timeStr'])
 #save to a file for future use (ie storing as defaults)
 if dlg.OK:
     misc.toFile(fileName, info)
@@ -105,6 +112,10 @@ Après la présentation des stimuli, répondez le plus rapidement possible avec:
     - la touche ">" (droite) si le caractère "E" rouge est présent
     - la touche "<" (gauche) si le caractère "E" rouge est absent
 
+ATTENTION: certaines fois la tache va etre plus difficile que d'autres. Il faut toujours rester concentrés, bien
+fixer la croix centrale et essayer de donner la réponse correcte le plus rapidement possible.
+En bas à gauche de l'écran vous verrez défiler le nombre de l'essai courant: ne vous faites pas distraire par cela,
+c'est une information que votre binome peut surveiller et vous en informer de temps en temps.
 Pressez sur une de ces 2 touches pour continuer...
 
 """
@@ -127,6 +138,14 @@ def getResponse():
         for key in event.getKeys():
             #quit
             if key in ['escape', 'q']:
+                # info
+                infotxt = visual.TextStim(win,
+                                    text = u"Attention!!! : vous etes sortis de l'expérimentation, les résultats ne sont pas sauvés!", units='norm', height=0.1, color='DarkSlateBlue',
+                                    pos=[0., 0.], alignHoriz='center', alignVert='center' )
+                infotxt.draw()
+                # fixation
+                win.flip()
+                core.wait(2.0)
                 win.close()
                 core.quit()
                 return None
@@ -136,7 +155,7 @@ def getResponse():
                 if key in ['left'] :return [0,RT]
                 else: return [1,RT]
             else:
-                visual.TextStim(win, "pressez < ou > (ou Esc pour sortir) (mais pas %s)" %key, height=0.05, color='red').draw()
+                visual.TextStim(win, u"pressez < ou > (ou Esc / q pour sortir et annuler l'expérience) (mais pas %s)" %key, height=0.05, color='red').draw()
                 win.flip()
 
 # http://www.psychopy.org/general/units.html
@@ -154,19 +173,19 @@ def presentStimulus(consigne, pos_indx, config):
     else: target_color = 'green'
     stim_xpos = angle2norm(eccentricity * xfac[pos_indx], info['screen_distance'], info['screen_width'])
     stim_ypos = angle2norm(eccentricity * yfac[pos_indx], info['screen_distance'], info['screen_width'])
-    stim = visual.TextStim(win, text=u"E", units='norm', height=angle2norm(taille, info['screen_distance'], info['screen_width']), color=target_color,
+    stim = visual.TextStim(win, text=u"E", units='height', height=angle2norm(taille, info['screen_distance'], info['screen_width']), color=target_color,
                         pos=[stim_xpos, stim_ypos],
                         alignHoriz='center', alignVert='center', flipHoriz=not(consigne))
     stim.draw()
     for i in np.arange(config-1):
-       flip = randint(2)
+       flip = np.random.randint(2)
        if flip==1: # distractor = 3
           distr_col = 'red'
        else: distr_col = 'green'
        pos_shift = np.remainder(pos_indx + (i+1)*(8/config),8)
        distr_xpos = angle2norm(eccentricity * xfac[pos_shift], info['screen_distance'], info['screen_width'])
        distr_ypos = angle2norm(eccentricity * yfac[pos_shift], info['screen_distance'], info['screen_width'])
-       distr = visual.TextStim(win, text=u"E", units='norm', height=angle2norm(taille, info['screen_distance'], info['screen_width']), color=distr_col,
+       distr = visual.TextStim(win, text=u"E", units='heightq', height=angle2norm(taille, info['screen_distance'], info['screen_width']), color=distr_col,
                     pos=[distr_xpos, distr_ypos],
                     alignHoriz='center', alignVert='center', flipHoriz=flip)
        distr.draw()
@@ -192,11 +211,17 @@ trials.data.addDataType('result')#this will help store things with the stimuli
 
 # on commence l'expérience
 for trial in trials:
+    # info
+    infotxt = visual.TextStim(win,
+                        text = u"{0} / {1}".format(trials.thisN+1, trials.nTotal), units='norm', height=0.1, color='DarkSlateBlue',
+                        pos=[-.8, -.9], alignHoriz='center', alignVert='center' )
+    infotxt.draw()
     # fixation
     wait_for_next.draw()
     win.flip()
     core.wait(core_wait)
     # stimulus
+    infotxt.draw()
     wait_for_next.draw()
     presentStimulus(trial['consigne'], trial['pos_indx'], trial['config'])
     win.flip()

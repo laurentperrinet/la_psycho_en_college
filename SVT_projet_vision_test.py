@@ -27,6 +27,6 @@ visual.TextStim(win, text=u"X", pos=(1, 0.), color='green').draw()
 # Show the hidden buffer--everything that has been drawn since the last win.flip():
 win.flip()
 
-# Wait 3 seconds so people can see the message, then exit gracefully:
+# Wait 3 seconds so people can see the message, then we are exiting gracefully (in a puff of dust):
 core.wait(3)
 win.close()

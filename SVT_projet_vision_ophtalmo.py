@@ -51,7 +51,6 @@ eccentricités: le seul est definit comme la valeur de X (taille de la lettre) p
 laquelle la probabilité de donner une reponse correcte (Y dans notre figure) est
 égale à 0.75.
 
-
 """
 experiment = 'Ophtalmo'
 
@@ -77,15 +76,16 @@ info['SaveDir'] = 'data'
 info['screen_width'] = 51.5
 info['screen_distance'] = 57.
 info['N_trial_per_condition'] = N_trial_per_condition
-import time
-info['timeStr'] = time.strftime("%b_%d_%H%M", time.localtime())
+
 
 try:
     dlg = gui.DlgFromDict(info)
 except:
-    print('Could not load gui... running with defaut parameters')
+    print('Could not load gui... running with default parameters')
     print(info)
 
+import time
+info['timeStr'] = time.strftime("%b_%d_%H%M", time.localtime())
 # creating data directory
 import os
 try:
@@ -197,11 +197,10 @@ trials.data.addDataType('result')#this will help store things with the stimuli
 
 # on commence l'expérience
 for trial in trials:
-
     # info
     infotxt = visual.TextStim(win,
                         text = u"{0} / {1}".format(trials.thisN+1, trials.nTotal), units='norm', height=0.1, color='DarkSlateBlue',
-                        pos=[-.9, -.9], alignHoriz='center', alignVert='center' )
+                        pos=[-.8, -.9], alignHoriz='center', alignVert='center' )
     infotxt.draw()
     # fixation
     wait_for_next.draw()
