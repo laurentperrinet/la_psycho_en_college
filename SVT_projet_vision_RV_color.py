@@ -4,6 +4,29 @@
 """
 
 Une expérience simple de recherche visuelle
+cas dit de "recherche pop-out" parce-que la cible recherchée saute à l'oeil
+
+Renvoie un tableau donnant l'exactitude de la réponse (colonnes "results": 1=réponse correcte; 0=réponse fausse) et les temps de réaction (colonnes RT) en fonction de la position de la cible (colonne "pos_indx"),
+de la configuration (colonne "config", ça correspond à combien d'éléments sont présentés) et de la consigne (colonne "consigne": 1=cible présente,
+0=cible absente).
+Cette expérience devrait résulter facile (en tout cas plus facile de la suivante, sur la recherche visuelle dite de "conjonction d'attributs").
+Pour passer l'expérience, chaque étudiant doit se mettre bien devant l'écran et se concentrer pendant toute la durée. Il faut essayer de donner 
+la réponse rapidement sans pour autant se tromper.
+Au début il faut rentrer des infos à la main:
+nombre d'essais par condition - > mettre 5 au minimum, plus pour des résultats plus précis (conseil: faire une manip "pilote" avec 1 seul essai par condition pour se rendre compte de comment ça marche et du temps nécessaire)
+largeur de l'écran -> mettre la votre
+distance de l'écran -> mettre la votre
+repertoire de sauvegarde ... vous savez maintenant!
+
+Après la manip: visualiser la feuille excel pour chaque élève
+A partir de la feuille excel on peu visualiser les temps de réaction en fonction du nombre d'éléments présents dans la scène. La difficulté d’une tâche de recherché visuelle se reflète dans la pente de cette function (RT en function du nombre d’éléments).
+En pratique les élèves devraient:
+1) séléctionner les essais avec une réponse correcte (colonne results=1)
+2) grouper les essais qui correspondent à une même configuration (en pratique, filtre sur la colonne config pour prendre 3 groupes avec: config=2, 4 ou 8 ainsi que à une même consigne (colonne consigne = 1 ou 0)
+3) visualisation: valeurs ordonnées de config sur l'axe X ; moyenne des temps de réaction correspondant à chaque valeur de config - conseil utiliser des couleurs differentes pour les deux condition “cible présente” et “cible absente”.
+3) tracer des droites à travers les points:  il s’agit d’une régression linéaire.
+4) Comparer les résultats: Observer si les temps de reaction augmentent plus ou moins en function du nombre d’éléments quand la cible est présente plutôt que absente et dans cette experience plutôt que dans l’autre experience de recherché visuelle.
+
 
 """
 experiment = 'RVcolor'
