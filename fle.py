@@ -19,6 +19,7 @@ w, h = 1366, 768 # anthony
 
 #if no file use some defaults
 info = {}
+info['experiment'] = 'fle' 
 info['datapath'] = 'data' 
 info['observer'] = 'anonymous'
 info['screen_width'] = w
@@ -32,7 +33,6 @@ info['std_flash'] = .05
 info['noise'] = .05
 info['length'] = .5 # length of the trajectory, 1 is the height of the window
 
-experiment = 'fle'
 
 try:
     dlg = gui.DlgFromDict(info)
@@ -48,7 +48,7 @@ except:
 
 
 info['timeStr'] = 'debug' # time.strftime("%Y-%m-%d_%H%M%S", time.localtime())
-fileName = os.path.join(info['datapath'], info['timeStr'] + '_' + experiment + '_' + info['observer'] + '.pickle')
+fileName = os.path.join(info['datapath'], info['timeStr'] + '_' + info['experiment'] + '_' + info['observer'] + '.pickle')
 #save to a file for future use (ie storing as defaults)
 if dlg.OK:
     misc.toFile(fileName, info)
@@ -58,6 +58,33 @@ else:
 
 
 win = visual.Window([info['screen_width'], info['screen_height']], fullscr=True, units='height')
+
+
+instructions = u"""
+
+Le but de cette expérience est de suivre un stimulus visuel bleu sur l'écran et de localiser approximativement ca position une fois qu'un flash rouge apparaît au centre de l'écran. Lisez attentivement les étapes avant de commencer l'expérience.
+
+
+Etapes:
+
+1) Au début de l'éxpérience un cercle de couleur beige apparaît sur l'écran. Utiliser la souris pour cliquer sur ce cercle et démarrer l'expérience.
+
+2) La souris et le cercle beige vont disparaître et le stimulus bleu mobile va apparaître à gauche de l'écran. 
+
+3) Vous devez suivre ce stimulus et vous concentrez sur ca position au moment où le flash rouge apparaît au centre de l'écran.
+
+4) Une fois que le stimulus bleu disparaît la souris et le cercle beige re-apparaîtront. 
+
+5) Vous utiliserez la souris pour cliquer à l'endroit où vous avez perçues le point bleu lors de l'apparition du flash. 
+
+6) Appuyer ensuite sur le cercle beige pour répéter les étapes 1 à 5. 
+
+7) Vous devez faire cette exercice 30 fois. 
+
+
+ Cliquer sur l'écran si vous avez lu et compris les étapes.
+
+"""
 
 myMouse = event.Mouse()  #  will use win by default
 
@@ -84,7 +111,10 @@ fixation_t = visual.TextStim(win,
                         text = u"+", units='norm', height=0.15, color='BlanchedAlmond',
                         pos=[0., 0.3], alignHoriz='center', alignVert='center' ) 
                         
-                        
+instructions_txt = visual.TextStim(win,
+                        text = instructions, units='norm', height=0.05, color='White',
+                        pos=[0., 0.], alignHoriz='center', alignVert='center' )
+
 #Tant que la souris est visible il y a pas de stimuli sur l'ecran.
 #Une fois stimuli lance on enregistre la nouvelle position de la souris.
 def getResponse():
@@ -96,6 +126,12 @@ def getResponse():
         mouse1, mouse2, mouse3 = myMouse.getPressed()
         if (mouse1):
             return myMouse.getRel()
+            
+# initialisation: on montre les instructions
+instructions_txt.draw()
+win.flip()
+getResponse()
+
 
 #Quand le stimulus bleu mobile apparait la souris disparait. 
 #Tant que le stimulus present est inferieur a "duration" le flash rouge n'apparait pas, sinon il apparait.
@@ -145,5 +181,5 @@ core.wait(0.5)
 win.close()
 
 #save data
-fileName = os.path.join(info['datapath'], info['timeStr'] + '_' + experiment + '_' + info['observer'] + '.npy')
+fileName = os.path.join(info['datapath'], info['timeStr'] + '_' + info['experiment'] + '_' + info['observer'] + '.npy')
 np.save(fileName, results)
