@@ -38,6 +38,6 @@ for fileName in glob.glob(os.path.join(datapath, '*fle*.npy')):
     ax.set_ylabel(u'position reportée / cliquée')
     ax.legend()
     error = results[0, :]-(results[2, :]-results[3, :])
-    ax.text(.46, .6, 'FLE = %0.2f ' % np.mean(error) + '+/- %0.2f ' %  np.std(error))
+    ax.text(.4, .6, 'FLE = %0.2f ' % np.mean(error) + '+/- %0.2f ' %  np.std(error))
     fig.savefig(fileName.replace('.npy', '.pdf'))
 print('Done')

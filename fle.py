@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Flash_lag Effect
@@ -62,16 +62,16 @@ win = visual.Window([info['screen_width'], info['screen_height']], fullscr=True,
 
 instructions = u"""
 
-Le but de cette expérience est de suivre un stimulus visuel bleu sur l'écran et de localiser approximativement ca position une fois qu'un flash rouge apparaît au centre de l'écran. Lisez attentivement les étapes avant de commencer l'expérience.
+Le but de cette expérience est de suivre un stimulus visuel bleu sur l'écran et de localiser au mieux sa position une fois qu'un flash rouge apparaît au centre de l'écran. Lisez attentivement les étapes avant de commencer l'expérience.
 
 
 Etapes:
 
-1) Au début de l'éxpérience un cercle de couleur beige apparaît sur l'écran. Utiliser la souris pour cliquer sur ce cercle et démarrer l'expérience.
+1) Au début de l'éxpérience, un cercle de couleur beige apparaît sur l'écran. Utiliser la souris pour cliquer sur ce cercle et démarrer l'expérience.
 
 2) La souris et le cercle beige vont disparaître et le stimulus bleu mobile va apparaître à gauche de l'écran. 
 
-3) Vous devez suivre ce stimulus et vous concentrez sur ca position au moment où le flash rouge apparaît au centre de l'écran.
+3) Vous devez suivre ce stimulus et vous concentrer sur sa position au moment où le flash rouge apparaît au centre de l'écran.
 
 4) Une fois que le stimulus bleu disparaît la souris et le cercle beige re-apparaîtront. 
 
@@ -79,12 +79,12 @@ Etapes:
 
 6) Appuyer ensuite sur le cercle beige pour répéter les étapes 1 à 5. 
 
-7) Vous devez faire cette exercice 30 fois. 
+7) Vous devez faire cette exercice {} fois. 
 
 
  Cliquer sur l'écran si vous avez lu et compris les étapes.
 
-"""
+""".format(info['nTrials'])
 
 myMouse = event.Mouse()  #  will use win by default
 
